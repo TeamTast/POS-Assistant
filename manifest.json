@@ -1,0 +1,52 @@
+{
+    "manifest_version": 3,
+    "name": "POS アシスタント",
+    "description": "東進学力POSの動作を改善",
+    "version": "1.0.0",
+    "icons": {
+        "16": "icons/16.png",
+        "48": "icons/48.png",
+        "128": "icons/128.png"
+    },
+    "permissions": [
+        "downloads",
+        "storage"
+    ],
+    "host_permissions": [
+        "https://pos.toshin.com/*"
+    ],
+    "background": {
+        "service_worker": "background.js",
+        "type": "module"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "https://pos.toshin.com/TGT/OPCTTS/OPCTTS_Student/EnshuKaishi*",
+                "https://pos.toshin.com/TGT/OPCTTS/OPCTTS_Student/MondaiKaitoInsatsu*",
+                "https://pos.toshin.com/TGT/OPCTSS/OPCTSS_Student/EnshuKaishi*",
+                "https://pos.toshin.com/TGT/OPCTSS/OPCTSS_Student/MondaiKaitoInsatsu*",
+                "https://pos.toshin.com/SSO1/SSOMenu/PosApplication.aspx",
+                "https://pos.toshin.com/sso1/ssomenu/sessionerror.html*",
+                "https://pos.toshin.com/SSO1/SSOMenu/sessionerror.html*"
+            ],
+            "js": [
+                "content.js"
+            ],
+            "run_at": "document_end",
+            "all_frames": true
+        }
+    ],
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "functions/enshu_assistant/content_parent.js",
+                "functions/enshu_assistant/content_print.js",
+                "functions/redirect_login/content.js"
+            ],
+            "matches": [
+                "https://pos.toshin.com/*"
+            ]
+        }
+    ]
+}
