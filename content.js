@@ -1,7 +1,7 @@
 (async () => {
     try {
         const url = window.location.href;
-        if (/sessionerror\.html/i.test(url)) {
+        if (/sessionerror\.html/i.test(url) || /RBTLoginError\.aspx/i.test(url)) {
             const { initRedirectLogin } = await import(chrome.runtime.getURL('functions/redirect_login/content.js'));
             initRedirectLogin();
         } else if (/MondaiKaitoInsatsu/.test(url)) {

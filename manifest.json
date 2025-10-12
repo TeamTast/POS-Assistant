@@ -13,7 +13,7 @@
         "storage"
     ],
     "host_permissions": [
-        "https://pos.toshin.com/*"
+        "https://*.toshin.com/*"
     ],
     "background": {
         "service_worker": "background.js",
@@ -28,7 +28,8 @@
                 "https://pos.toshin.com/TGT/OPCTSS/OPCTSS_Student/MondaiKaitoInsatsu*",
                 "https://pos.toshin.com/SSO1/SSOMenu/PosApplication.aspx",
                 "https://pos.toshin.com/sso1/ssomenu/sessionerror.html*",
-                "https://pos.toshin.com/SSO1/SSOMenu/sessionerror.html*"
+                "https://pos.toshin.com/SSO1/SSOMenu/sessionerror.html*",
+                "https://pos2.toshin.com/RBT2/RBT_Student/Page/ErrorPages/RBTLoginError.aspx"
             ],
             "js": [
                 "content.js"
@@ -45,7 +46,7 @@
                 "functions/redirect_login/content.js"
             ],
             "matches": [
-                "https://pos.toshin.com/*"
+                "https://*.toshin.com/*"
             ]
         }
     ]

@@ -5,7 +5,8 @@ function shouldRedirect({ locationHref }) {
         return false;
     }
     const normalized = locationHref.toLowerCase();
-    return normalized.includes('/sso1/ssomenu/sessionerror.html');
+    return normalized.includes('/sso1/ssomenu/sessionerror.html')
+        || normalized.includes('/rbt2/rbt_student/page/errorpages/rbtloginerror.aspx');
 }
 
 export function initRedirectLogin({
