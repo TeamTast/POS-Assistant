@@ -8,7 +8,6 @@
   - セッションが存在する場合に `https://pos.toshin.com/SSO1/SSOMenu/StudentMenu.aspx` へ自動リダイレクト
   - 「セッションが破棄されました」ページからログインページへの自動リダイレクト
 - **フロントの改善**
-- 内容:
   - `PosApplication.aspx` を 100vh 固定・スクロール無効化
   - `iframe#appFrame` の高さ制御を再コントロール
   - `iframe#appFrame` が `SSOLogin/StudentLogin.aspx` を表示した場合は `StudentMenu.aspx` へリダイレクト
