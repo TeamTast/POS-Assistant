@@ -17,12 +17,9 @@
         } else if (/SSO1\/SSOMenu\/PosApplication\.aspx/i.test(url)) {
             const { initPosApplicationEnhancer } = await import(chrome.runtime.getURL('functions/pos_application_enhancer/content.js'));
             initPosApplicationEnhancer();
-        } else if (/MondaiKaitoInsatsu/.test(url)) {
-            const { initEnshuAssistantPrint } = await import(chrome.runtime.getURL('functions/enshu_assistant/content_print.js'));
-            initEnshuAssistantPrint();
         } else {
-            const { initEnshuAssistantParent } = await import(chrome.runtime.getURL('functions/enshu_assistant/content_parent.js'));
-            initEnshuAssistantParent();
+            const { initEnshuAssistantContent } = await import(chrome.runtime.getURL('functions/enshu_assistant/content.js'));
+            await initEnshuAssistantContent({ url });
         }
     } catch (error) {
         console.error('Failed to initialize POS Assistant content script:', error);

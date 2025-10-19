@@ -10,8 +10,7 @@
     },
     "permissions": [
         "downloads",
-        "storage",
-        "cookies"
+        "storage"
     ],
     "host_permissions": [
         "https://*.toshin.com/*"
@@ -23,16 +22,16 @@
     "content_scripts": [
         {
             "matches": [
-                "https://pos.toshin.com/TGT/OPCTTS/OPCTTS_Student/EnshuKaishi*",
-                "https://pos.toshin.com/TGT/OPCTTS/OPCTTS_Student/MondaiKaitoInsatsu*",
-                "https://pos.toshin.com/TGT/OPCTSS/OPCTSS_Student/EnshuKaishi*",
-                "https://pos.toshin.com/TGT/OPCTSS/OPCTSS_Student/MondaiKaitoInsatsu*",
                 "https://www.toshin.com/pos*",
                 "https://toshin.com/pos*",
                 "https://pos.toshin.com/SSO1/SSOMenu/PosApplication.aspx",
                 "https://pos.toshin.com/sso1/ssomenu/sessionerror.html*",
                 "https://pos.toshin.com/SSO1/SSOMenu/sessionerror.html*",
-                "https://pos2.toshin.com/RBT2/RBT_Student/Page/ErrorPages/RBTLoginError.aspx"
+                "https://pos2.toshin.com/RBT2/RBT_Student/Page/ErrorPages/RBTLoginError.aspx",
+                "https://pos.toshin.com/TGT/OPCTTS/OPCTTS_Student/EnshuKaishi*",
+                "https://pos.toshin.com/TGT/OPCTTS/OPCTTS_Student/MondaiKaitoInsatsu*",
+                "https://pos.toshin.com/TGT/OPCTSS/OPCTSS_Student/KekkaShousai*",
+                "https://pos.toshin.com/TGT/OPCTTS/OPCTTS_Student/KekkaShosai*"
             ],
             "js": [
                 "content.js"
@@ -44,8 +43,14 @@
     "web_accessible_resources": [
         {
             "resources": [
-                "functions/enshu_assistant/content_parent.js",
-                "functions/enshu_assistant/content_print.js",
+                "functions/enshu_assistant/content.js",
+                "functions/enshu_assistant/pdf_renamer/shared.js",
+                "functions/enshu_assistant/pdf_renamer/get_mondai/parent.js",
+                "functions/enshu_assistant/pdf_renamer/get_mondai/print.js",
+                "functions/enshu_assistant/pdf_renamer/get_mondai/background.js",
+                "functions/enshu_assistant/pdf_renamer/get_kaisetsu/page.js",
+                "functions/enshu_assistant/pdf_renamer/get_kaisetsu/download.js",
+                "functions/enshu_assistant/pdf_renamer/get_kaisetsu/background.js",
                 "functions/session_manager/content.js",
                 "functions/session_manager/constants.js",
                 "functions/pos_application_enhancer/content.js"

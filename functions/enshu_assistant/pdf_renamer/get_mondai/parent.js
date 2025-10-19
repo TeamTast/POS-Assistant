@@ -1,35 +1,25 @@
+import { createTitleCache } from '../shared.js';
+
 const DEFAULT_BUTTON_SELECTOR = '[data-url*="MondaiKaitoInsatsu"]';
 const DEFAULT_TITLE_SELECTORS = ['.page-head-title', '.enshu-set-nm', 'h2.page-title'];
 
-export function initEnshuAssistantParent({
+export function initMondaiTitleObserver({
     root = document,
     buttonSelector = DEFAULT_BUTTON_SELECTOR,
     titleSelectors = DEFAULT_TITLE_SELECTORS
 } = {}) {
-    let lastStoredTitle = null;
-
-    const sanitizeFilename = (name) => name.replace(/[\/:*?"<>|]/g, '_');
-
-    const cacheTitle = (rawTitle) => {
-        const safeTitle = rawTitle || 'Untitled';
-        if (safeTitle === lastStoredTitle) {
-            return;
-        }
-        lastStoredTitle = safeTitle;
-        chrome.storage.local.set({ lastPageTitle: safeTitle }, () => {
-            console.log('Set PDF Title:', safeTitle);
-        });
-        chrome.runtime.sendMessage({ type: 'SET_PDF_TITLE', title: safeTitle });
-    };
+    const cacheTitle = createTitleCache();
 
     const extractTitleText = () => {
         for (const selector of titleSelectors) {
             const elem = root.querySelector(selector);
-            if (elem) {
-                const text = elem.textContent.trim();
-                if (text) {
-                    return sanitizeFilename(text);
-                }
+            if (!elem) {
+                continue;
+            }
+
+            const text = elem.textContent?.trim();
+            if (text) {
+                return text;
             }
         }
         return null;

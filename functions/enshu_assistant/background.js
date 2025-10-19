@@ -1,8 +1,15 @@
+import { sanitizeFilename } from './pdf_renamer/shared.js';
+import { createMondaiDownloadHandler } from './pdf_renamer/get_mondai/background.js';
+import { createKaisetsuDownloadHandler } from './pdf_renamer/get_kaisetsu/background.js';
+
 export function initEnshuAssistantBackground() {
     console.log('Initializing Enshu Assistant background service worker');
     let lastPdfTitle = null;
 
-    const sanitizeFilename = (name) => name.replace(/[\\/:*?"<>|]/g, '_');
+    const downloadHandlers = [
+        createMondaiDownloadHandler(),
+        createKaisetsuDownloadHandler()
+    ];
 
     const setLastPdfTitle = (rawTitle) => {
         if (!rawTitle) {
@@ -39,28 +46,32 @@ export function initEnshuAssistantBackground() {
     chrome.downloads.onDeterminingFilename.addListener((item, suggest) => {
         console.log('Download filename intercepted:', item.filename);
 
+        const handler = downloadHandlers.find((candidate) => candidate.matches(item));
+        if (!handler) {
+            suggest();
+            return;
+        }
+
         const applyRename = (title) => {
-            if (title) {
-                console.log('Change PDF Title:', `${title}.pdf`);
-                suggest({ filename: `${title}.pdf`, conflictAction: 'overwrite' });
-                lastPdfTitle = null;
+            const safeTitle = title ? sanitizeFilename(title) : null;
+            if (safeTitle) {
+                console.log(`Change ${handler.label} PDF Title:`, `${safeTitle}.pdf`);
+                suggest({ filename: `${safeTitle}.pdf`, conflictAction: 'overwrite' });
+                lastPdfTitle = safeTitle;
             } else {
                 suggest();
             }
         };
 
-        if (item.filename === 'GetMondaiPdf.pdf') {
-            if (lastPdfTitle) {
-                applyRename(lastPdfTitle);
-            } else {
-                chrome.storage.local.get('lastPageTitle', (result) => {
-                    const storedTitle = result && result.lastPageTitle ? sanitizeFilename(result.lastPageTitle) : null;
-                    applyRename(storedTitle);
-                });
-            }
-        } else {
-            suggest();
+        if (lastPdfTitle) {
+            applyRename(lastPdfTitle);
+            return;
         }
+
+        chrome.storage.local.get('lastPageTitle', (result) => {
+            const storedTitle = result && result.lastPageTitle ? sanitizeFilename(result.lastPageTitle) : null;
+            applyRename(storedTitle);
+        });
     });
 
     refreshTitleFromStorage();
