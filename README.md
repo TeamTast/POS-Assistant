@@ -12,7 +12,7 @@
   - `iframe#appFrame` の高さ制御を再コントロール
   - `iframe#appFrame` が `SSOLogin/StudentLogin.aspx` を表示した場合は `StudentMenu.aspx` へリダイレクト
 - **過去問演習のPDFリネーム**
-  - `GetMondaiPdf.pdf` から 教材の名称へ変更
+  - `GetMondaiPdf.pdf` および `GetKaisetsuPdf.pdf` から教材の名称へ変更
 
 ## 機能の追加
 1. `functions/` 配下に新しいモジュールを作成
