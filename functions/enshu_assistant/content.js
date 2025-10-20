@@ -1,5 +1,6 @@
 const MONDAI_PRINT_PATTERN = /MondaiKaitoInsatsu/i;
 const KAISETSU_PAGE_PATTERN = /OPCTTS_Student\/KekkaShou?sai/i;
+const ENSHU_JISSHI_PATTERN = /OPCTTS_Student\/EnshuJisshi/i;
 
 const resolveUrl = (root, explicitUrl) => {
     if (explicitUrl) {
@@ -42,6 +43,24 @@ export async function initEnshuAssistantContent({ root = document, url } = {}) {
 
         return () => {
             downloadManager?.destroy?.();
+        };
+    }
+
+    if (ENSHU_JISSHI_PATTERN.test(currentUrl)) {
+        const [
+            { initMarksheetDeletion },
+            { initMondaiTitleObserver }
+        ] = await Promise.all([
+            import('./marksheet_deletion/index.js'),
+            import('./pdf_renamer/get_mondai/parent.js')
+        ]);
+
+        const destroyTitleObserver = initMondaiTitleObserver({ root });
+        const destroyMarksheetDeletion = initMarksheetDeletion({ root });
+
+        return () => {
+            destroyMarksheetDeletion?.();
+            destroyTitleObserver?.();
         };
     }
 

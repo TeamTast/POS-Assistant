@@ -11,7 +11,8 @@
   - `PosApplication.aspx` を 100vh 固定・スクロール無効化
   - `iframe#appFrame` の高さ制御を再コントロール
   - `iframe#appFrame` が `SSOLogin/StudentLogin.aspx` を表示した場合は `StudentMenu.aspx` へリダイレクト
-- **過去問演習のPDFリネーム**
+- **過去問演習の改善**
+  - マークシートの数字入力時、Backspaceで取り消しを可能に
   - `GetMondaiPdf.pdf` および `GetKaisetsuPdf.pdf` から教材の名称へ変更
 
 ## 機能の追加
