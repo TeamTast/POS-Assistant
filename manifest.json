@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "POS アシスタント",
     "description": "学力POSの動作を改善",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "icons": {
         "16": "icons/16.png",
         "48": "icons/48.png",
@@ -32,7 +32,8 @@
                 "https://pos.toshin.com/TGT/OPCTTS/OPCTTS_Student/EnshuKaishi*",
                 "https://pos.toshin.com/TGT/OPCTTS/OPCTTS_Student/MondaiKaitoInsatsu*",
                 "https://pos.toshin.com/TGT/OPCTSS/OPCTSS_Student/KekkaShousai*",
-                "https://pos.toshin.com/TGT/OPCTTS/OPCTTS_Student/KekkaShosai*"
+                "https://pos.toshin.com/TGT/OPCTTS/OPCTTS_Student/KekkaShosai*",
+                "https://pos.toshin.com/TGT/OPCTTS/OPCTTS_Student/NendobetsuRireki*"
             ],
             "js": [
                 "content.js"
@@ -46,16 +47,19 @@
             "resources": [
                 "functions/enshu_assistant/content.js",
                 "functions/enshu_assistant/pdf_renamer/shared.js",
-                "functions/enshu_assistant/pdf_renamer/get_mondai/parent.js",
-                "functions/enshu_assistant/pdf_renamer/get_mondai/print.js",
+                "functions/enshu_assistant/pdf_renamer/get_mondai/enshu_jisshi.js",
+                "functions/enshu_assistant/pdf_renamer/get_mondai/mondai_kaito_insatsu.js",
                 "functions/enshu_assistant/pdf_renamer/get_mondai/background.js",
-                "functions/enshu_assistant/pdf_renamer/get_kaisetsu/page.js",
+                "functions/enshu_assistant/pdf_renamer/get_kaisetsu/kekka_shousai.js",
                 "functions/enshu_assistant/pdf_renamer/get_kaisetsu/download.js",
                 "functions/enshu_assistant/pdf_renamer/get_kaisetsu/background.js",
-                "functions/enshu_assistant/marksheet_deletion/index.js",
+                "functions/enshu_assistant/marksheet_enhancer/enshu_jisshi.js",
+                "functions/enshu_assistant/daimon_navigation/kekka_shosai.js",
+                "functions/enshu_assistant/daimon_navigation/nendobetsu_rireki.js",
                 "functions/session_manager/content.js",
                 "functions/session_manager/constants.js",
-                "functions/pos_application_enhancer/content.js"
+                "functions/pos_application_enhancer/content.js",
+                "storage.js"
             ],
             "matches": [
                 "https://*.toshin.com/*"

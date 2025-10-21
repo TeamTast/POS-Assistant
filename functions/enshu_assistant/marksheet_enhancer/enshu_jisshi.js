@@ -57,6 +57,76 @@ const normalizeDigitKey = (event) => {
     return null;
 };
 
+const isClickableNavigationControl = (element) => {
+    if (!element) {
+        return false;
+    }
+
+    if (element instanceof HTMLButtonElement) {
+        return !element.disabled;
+    }
+
+    if (element instanceof HTMLInputElement) {
+        const type = element.type?.toLowerCase() || '';
+        return ['submit', 'button'].includes(type) && !element.disabled;
+    }
+
+    return typeof element.click === 'function';
+};
+
+const triggerNavigationButton = (element) => {
+    if (!isClickableNavigationControl(element)) {
+        return false;
+    }
+
+    element.click();
+    return true;
+};
+
+const parseIndexValue = (value) => {
+    if (typeof value !== 'string') {
+        return null;
+    }
+
+    const parsed = Number.parseInt(value, 10);
+    return Number.isNaN(parsed) ? null : parsed;
+};
+
+const getCurrentTargetIndex = (root) => {
+    const targetIndexInput = findInRoot(root, '#targetIndex');
+    if (targetIndexInput && typeof targetIndexInput.value === 'string') {
+        const parsed = parseIndexValue(targetIndexInput.value);
+        if (parsed != null) {
+            return parsed;
+        }
+    }
+
+    const currentIndexInput = findInRoot(root, '#currentIndex');
+    if (currentIndexInput && typeof currentIndexInput.value === 'string') {
+        const parsed = parseIndexValue(currentIndexInput.value);
+        if (parsed != null) {
+            return parsed;
+        }
+    }
+
+    return null;
+};
+
+const getMaxTargetIndex = (root) => {
+    if (!root || typeof root.querySelectorAll !== 'function') {
+        return null;
+    }
+
+    const buttons = root.querySelectorAll('#daimon-buttons button.button-daimon');
+    const count = buttons.length;
+
+    if (count <= 0) {
+        return null;
+    }
+
+    return count - 1;
+};
+
 const extractAnswerIndex = (input) => {
     const name = input?.name || '';
     const match = name.match(/AnswerList\[(\d+)\]/);
@@ -238,6 +308,47 @@ export const initMarksheetDeletion = ({ root = document } = {}) => {
         });
     };
 
+    // Map navigation keys to daimon navigation buttons when present.
+    const handleNavigationKeydown = (event) => {
+        if (event.ctrlKey || event.metaKey || event.altKey || event.shiftKey) {
+            return;
+        }
+
+        if (isEditableTarget(event.target) || event.target instanceof HTMLSelectElement) {
+            return;
+        }
+
+        const currentIndex = getCurrentTargetIndex(root);
+        const maxIndex = getMaxTargetIndex(root);
+
+        let selector = null;
+
+        if (event.key === 'Enter' || event.key === 'ArrowRight') {
+            if (currentIndex != null && maxIndex != null && currentIndex >= maxIndex) {
+                return;
+            }
+            selector = '#nextDaimon';
+        } else if (event.key === 'ArrowLeft') {
+            if (currentIndex != null && currentIndex <= 0) {
+                return;
+            }
+            selector = '#previousDaimon';
+        }
+
+        if (!selector) {
+            return;
+        }
+
+        const button = findInRoot(root, selector);
+
+        if (!triggerNavigationButton(button)) {
+            return;
+        }
+
+        event.preventDefault();
+        event.stopPropagation();
+    };
+
     const handleDigitKeydown = (event) => {
         if (event.ctrlKey || event.metaKey || event.altKey) {
             return;
@@ -290,11 +401,13 @@ export const initMarksheetDeletion = ({ root = document } = {}) => {
     root.addEventListener('change', handleChange, true);
     root.addEventListener('keydown', handleKeydown, true);
     root.addEventListener('keydown', handleDigitKeydown, true);
+    root.addEventListener('keydown', handleNavigationKeydown, true);
 
     const destroy = () => {
         root.removeEventListener('change', handleChange, true);
         root.removeEventListener('keydown', handleKeydown, true);
         root.removeEventListener('keydown', handleDigitKeydown, true);
+        root.removeEventListener('keydown', handleNavigationKeydown, true);
         selectionHistory.length = 0;
         observer.disconnect();
         selectedByName.clear();

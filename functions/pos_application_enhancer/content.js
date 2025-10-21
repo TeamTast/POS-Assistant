@@ -210,15 +210,10 @@ function setupAppFrameRedirect({ root }) {
         appFrameElement.dataset.posAssistantRedirecting = '1';
 
         try {
-            if (appFrameElement.contentWindow && appFrameElement.contentWindow.location) {
-                appFrameElement.contentWindow.location.replace(redirectUrl);
-                return;
-            }
+            root.location.replace(redirectUrl);
         } catch (error) {
-            /* fall through to resetting src */
+            root.location.href = redirectUrl;
         }
-
-        appFrameElement.src = redirectUrl;
     };
 
     const handleLoad = () => {

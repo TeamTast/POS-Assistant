@@ -1,3 +1,5 @@
+import { getCachedPdfTitle, setCachedPdfTitle } from '../../../storage.js';
+
 export const sanitizeFilename = (name) => {
     const raw = String(name ?? '').trim();
     if (!raw) {
@@ -17,11 +19,7 @@ export function createTitleCache({ logPrefix = 'Set PDF Title' } = {}) {
         }
         lastStoredTitle = safeTitle;
 
-        chrome.storage.local.set({ lastPageTitle: safeTitle }, () => {
-            console.log(`${logPrefix}:`, safeTitle);
-        });
-
-        chrome.runtime.sendMessage({ type: 'SET_PDF_TITLE', title: safeTitle });
+        setCachedPdfTitle(safeTitle, { logPrefix });
     };
 }
 
@@ -56,8 +54,7 @@ export function initDownloadFilenameManager({
     };
 
     const applyDownloadFilename = () => {
-        chrome.storage.local.get('lastPageTitle', (result) => {
-            const title = result?.lastPageTitle ?? 'Untitled';
+        getCachedPdfTitle().then((title) => {
             const safeTitle = `${sanitizeFilename(title)}.pdf`;
             const downloadLink = findDownloadLink();
 

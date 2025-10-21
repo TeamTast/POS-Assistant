@@ -13,7 +13,9 @@
   - `iframe#appFrame` が `SSOLogin/StudentLogin.aspx` を表示した場合は `StudentMenu.aspx` へリダイレクト
 - **過去問演習の改善**
   - マークシートの数字入力時、Backspaceで取り消しを可能に
+  - マークシートページで `← Left` で1つ前の大問、 `Right →` または `Enter ` で次の大問に進むように
   - `GetMondaiPdf.pdf` および `GetKaisetsuPdf.pdf` から教材の名称へ変更
+  - 大問の解説ページ上部に他の大問へのナビゲーションを追加
 
 ## 機能の追加
 1. `functions/` 配下に新しいモジュールを作成

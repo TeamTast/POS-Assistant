@@ -1,5 +1,6 @@
 const MONDAI_PRINT_PATTERN = /MondaiKaitoInsatsu/i;
 const KAISETSU_PAGE_PATTERN = /OPCTTS_Student\/KekkaShou?sai/i;
+const NENDOBETSU_RIREKI_PATTERN = /OPCTTS_Student\/NendobetsuRireki/i;
 const ENSHU_JISSHI_PATTERN = /OPCTTS_Student\/EnshuJisshi/i;
 
 const resolveUrl = (root, explicitUrl) => {
@@ -22,23 +23,35 @@ const resolveUrl = (root, explicitUrl) => {
 export async function initEnshuAssistantContent({ root = document, url } = {}) {
     const currentUrl = resolveUrl(root, url);
 
+    if (NENDOBETSU_RIREKI_PATTERN.test(currentUrl)) {
+        const { initNendobetsuDaimonCollector } = await import('./daimon_navigation/nendobetsu_rireki.js');
+        return initNendobetsuDaimonCollector({ root, url: currentUrl });
+    }
+
     if (KAISETSU_PAGE_PATTERN.test(currentUrl)) {
-        const [{ initKaisetsuTitleObserver }, { initKaisetsuDownloadEnhancer }] = await Promise.all([
-            import('./pdf_renamer/get_kaisetsu/page.js'),
-            import('./pdf_renamer/get_kaisetsu/download.js')
+        const [
+            { initKaisetsuTitleObserver },
+            { initKaisetsuDownloadEnhancer },
+            { initKekkaShosaiNavigation }
+        ] = await Promise.all([
+            import('./pdf_renamer/get_kaisetsu/kekka_shousai.js'),
+            import('./pdf_renamer/get_kaisetsu/download.js'),
+            import('./daimon_navigation/kekka_shosai.js')
         ]);
 
         const destroyTitleObserver = initKaisetsuTitleObserver({ root });
         const downloadManager = initKaisetsuDownloadEnhancer({ root });
+        const destroyDaimonNavigation = initKekkaShosaiNavigation({ root, url: currentUrl });
 
         return () => {
             destroyTitleObserver?.();
             downloadManager?.destroy?.();
+            destroyDaimonNavigation?.();
         };
     }
 
     if (MONDAI_PRINT_PATTERN.test(currentUrl)) {
-        const { initMondaiDownloadEnhancer } = await import('./pdf_renamer/get_mondai/print.js');
+        const { initMondaiDownloadEnhancer } = await import('./pdf_renamer/get_mondai/mondai_kaito_insatsu.js');
         const downloadManager = initMondaiDownloadEnhancer({ root });
 
         return () => {
@@ -51,8 +64,8 @@ export async function initEnshuAssistantContent({ root = document, url } = {}) {
             { initMarksheetDeletion },
             { initMondaiTitleObserver }
         ] = await Promise.all([
-            import('./marksheet_deletion/index.js'),
-            import('./pdf_renamer/get_mondai/parent.js')
+            import('./marksheet_enhancer/enshu_jisshi.js'),
+            import('./pdf_renamer/get_mondai/enshu_jisshi.js')
         ]);
 
         const destroyTitleObserver = initMondaiTitleObserver({ root });
@@ -64,6 +77,6 @@ export async function initEnshuAssistantContent({ root = document, url } = {}) {
         };
     }
 
-    const { initMondaiTitleObserver } = await import('./pdf_renamer/get_mondai/parent.js');
+    const { initMondaiTitleObserver } = await import('./pdf_renamer/get_mondai/enshu_jisshi.js');
     return initMondaiTitleObserver({ root });
 }

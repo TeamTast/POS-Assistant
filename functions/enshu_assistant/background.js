@@ -1,6 +1,7 @@
 import { sanitizeFilename } from './pdf_renamer/shared.js';
 import { createMondaiDownloadHandler } from './pdf_renamer/get_mondai/background.js';
 import { createKaisetsuDownloadHandler } from './pdf_renamer/get_kaisetsu/background.js';
+import { getCachedPdfTitle, subscribeToCachedPdfTitle } from '../../storage.js';
 
 export function initEnshuAssistantBackground() {
     console.log('Initializing Enshu Assistant background service worker');
@@ -20,13 +21,9 @@ export function initEnshuAssistantBackground() {
     };
 
     const refreshTitleFromStorage = () => {
-        chrome.storage.local.get('lastPageTitle', (result) => {
-            if (chrome.runtime.lastError) {
-                console.warn('Error:', chrome.runtime.lastError.message);
-                return;
-            }
-            if (result && result.lastPageTitle) {
-                setLastPdfTitle(result.lastPageTitle);
+        getCachedPdfTitle().then((cachedTitle) => {
+            if (cachedTitle) {
+                setLastPdfTitle(cachedTitle);
             }
         });
     };
@@ -37,9 +34,9 @@ export function initEnshuAssistantBackground() {
         }
     });
 
-    chrome.storage.onChanged.addListener((changes, area) => {
-        if (area === 'local' && changes.lastPageTitle) {
-            setLastPdfTitle(changes.lastPageTitle.newValue);
+    const unsubscribeCachedTitle = subscribeToCachedPdfTitle((nextTitle) => {
+        if (nextTitle) {
+            setLastPdfTitle(nextTitle);
         }
     });
 
@@ -68,11 +65,15 @@ export function initEnshuAssistantBackground() {
             return;
         }
 
-        chrome.storage.local.get('lastPageTitle', (result) => {
-            const storedTitle = result && result.lastPageTitle ? sanitizeFilename(result.lastPageTitle) : null;
-            applyRename(storedTitle);
+        getCachedPdfTitle().then((storedTitle) => {
+            const safeStoredTitle = storedTitle ? sanitizeFilename(storedTitle) : null;
+            applyRename(safeStoredTitle);
         });
     });
 
     refreshTitleFromStorage();
+
+    return () => {
+        unsubscribeCachedTitle?.();
+    };
 }
