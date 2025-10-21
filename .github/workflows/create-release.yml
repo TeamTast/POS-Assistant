@@ -21,7 +21,7 @@ jobs:
 
       - name: Create zip excluding .git and README.md
         run: |
-          zip -r "pos-assistant-${{ steps.extract_version.outputs.version }}.zip" . -x ".git/*" "README.md"
+          zip -r "pos-assistant-${{ steps.extract_version.outputs.version }}.zip" . -x ".git/*" "README.md" ".github/*"
 
       - name: Create GitHub release (draft)
         id: create_release
