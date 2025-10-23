@@ -18,7 +18,7 @@
   - 大問の解説ページ上部に他の大問へのナビゲーションを追加
 
 ## 機能の追加
-1. `functions/` 配下に新しいモジュールを作成
-2. 既存の `content.js` または `background.js` から `chrome.runtime.getURL()` を使って import し、初期化関数を呼び出す
-3.  `manifest.json` の `web_accessible_resources` にjsファイルを追加
-4. 特定ページでの操作が必要な時は `manifest.json` の `content_scripts.matches` に URLを追加
+1. `lib/` 配下に新しいモジュールを作成
+2. 既存の `content.ts` または `background.ts` から `await import()` を使って import し、初期化関数を呼び出す
+3.  `vite.config.ts` の `web_accessible_resources` にjsファイルを追加1
+4. 特定ページでの操作が必要な時は `vite.config.ts` の `content_scripts.matches` に URLを追加
