@@ -1,5 +1,5 @@
-import type { DestroyFn } from '../types.ts';
-import type { EnshuAssistantContentInitializer } from './types.ts';
+import type { DestroyFn } from '@/lib/types.ts';
+import type { EnshuAssistantContentInitializer } from '@/lib/enshu_assistant/types.ts';
 
 const MONDAI_PRINT_PATTERN = /MondaiKaitoInsatsu/i;
 const KAISETSU_PAGE_PATTERN = /OPCTTS_Student\/KekkaShou?sai/i;

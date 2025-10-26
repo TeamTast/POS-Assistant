@@ -1,6 +1,6 @@
-import { createTitleCache } from '../shared.ts';
-import type { DestroyFn } from '../../../types.ts';
-import type { KaisetsuTitleObserverOptions } from '../../types.ts';
+import { createTitleCache } from '@/lib/enshu_assistant/pdf_renamer/shared.ts';
+import type { DestroyFn } from '@/lib/types.ts';
+import type { KaisetsuTitleObserverOptions } from '@/lib/enshu_assistant/types.ts';
 
 const DEFAULT_TITLE_SELECTORS = ['.page-head-sub'] as const;
 

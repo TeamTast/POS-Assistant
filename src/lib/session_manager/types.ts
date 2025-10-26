@@ -1,5 +1,5 @@
-import type { WindowRootOptions } from '../types.ts';
-import type { AUTH_CHECK_MESSAGE } from './constants.ts';
+import type { WindowRootOptions } from '@/lib/types.ts';
+import type { AUTH_CHECK_MESSAGE } from '@/lib/session_manager/constants.ts';
 
 export interface SessionManagerOptions extends WindowRootOptions<Window> {
   readonly targetUrl?: string;

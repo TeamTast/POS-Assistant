@@ -12,13 +12,13 @@
         }
 
         if (/sessionerror\.html/i.test(url) || /RBTLoginError\.aspx/i.test(url) || isLandingPage) {
-            const { initSessionManager } = await import('./lib/session_manager/content.ts');
+            const { initSessionManager } = await import('@/lib/session_manager/content.ts');
             initSessionManager();
         } else if (/SSO1\/SSOMenu\/PosApplication\.aspx/i.test(url)) {
-            const { initPosApplicationEnhancer } = await import('./lib/pos_application_enhancer/content.ts');
+            const { initPosApplicationEnhancer } = await import('@/lib/pos_application_enhancer/content.ts');
             initPosApplicationEnhancer();
         } else {
-            const { initEnshuAssistantContent } = await import('./lib/enshu_assistant/content.ts');
+            const { initEnshuAssistantContent } = await import('@/lib/enshu_assistant/content.ts');
             await initEnshuAssistantContent({ url });
         }
     } catch (error) {

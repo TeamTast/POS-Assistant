@@ -1,9 +1,9 @@
-import { sanitizeFilename } from './pdf_renamer/shared.ts';
-import { createMondaiDownloadHandler } from './pdf_renamer/get_mondai/background.ts';
-import { createKaisetsuDownloadHandler } from './pdf_renamer/get_kaisetsu/background.ts';
-import { getCachedPdfTitle, subscribeToCachedPdfTitle } from '../../storage.ts';
-import type { DestroyFn } from '../types.ts';
-import type { DownloadHandler } from './types.ts';
+import { sanitizeFilename } from '@/lib/enshu_assistant/pdf_renamer/shared.ts';
+import { createMondaiDownloadHandler } from '@/lib/enshu_assistant/pdf_renamer/get_mondai/background.ts';
+import { createKaisetsuDownloadHandler } from '@/lib/enshu_assistant/pdf_renamer/get_kaisetsu/background.ts';
+import { getCachedPdfTitle, subscribeToCachedPdfTitle } from '@/lib/storage.ts';
+import type { DestroyFn } from '@/lib/types.ts';
+import type { DownloadHandler } from '@/lib/enshu_assistant/types.ts';
 
 type DownloadSuggestCallback = (suggestion?: chrome.downloads.FilenameSuggestion) => void;
 

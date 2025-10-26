@@ -62,7 +62,7 @@ const manifest = defineManifest({
         "src/lib/session_manager/content.ts",
         "src/lib/session_manager/constants.ts",
         "src/lib/pos_application_enhancer/content.ts",
-        "src/storage.ts"
+        "src/lib/storage.ts"
       ],
       matches: [
         "https://*.toshin.com/*"
@@ -87,6 +87,10 @@ export default defineConfig({
     },
     hmr: {
       port: 5173,
+    },
+  },resolve: {
+    alias: {
+      '@': '/src',
     },
   },
 });

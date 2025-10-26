@@ -1,10 +1,10 @@
-import { getCachedPdfTitle, setCachedPdfTitle } from '../../../storage.ts';
-import type { DestroyFn } from '../../types.ts';
+import { getCachedPdfTitle, setCachedPdfTitle } from '@/lib/storage.ts';
+import type { DestroyFn } from '@/lib/types.ts';
 import type {
     DownloadFilenameManager,
     DownloadFilenameManagerOptions,
     TitleCacheWriter
-} from '../types.ts';
+} from '@/lib/enshu_assistant/types.ts';
 
 export const sanitizeFilename = (name: unknown): string => {
     const raw = String(name ?? '').trim();

@@ -1,4 +1,4 @@
-import type { DestroyFn, DocumentRootOptions, DocumentRootWithUrlOptions } from '../types.ts';
+import type { DestroyFn, DocumentRootOptions, DocumentRootWithUrlOptions } from '@/lib/types.ts';
 
 export interface EnshuAssistantContentOptions
   extends DocumentRootWithUrlOptions<Document> {}

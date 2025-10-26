@@ -1,4 +1,4 @@
-import type { DownloadHandler } from '../../types.ts';
+import type { DownloadHandler } from '@/lib/enshu_assistant/types.ts';
 
 const KAISETSU_PDF_SUFFIXES: readonly string[] = ['GetKaisetsuPdf.pdf'];
 

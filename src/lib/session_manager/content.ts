@@ -3,8 +3,8 @@ import {
   STUDENT_MENU_URL,
   POS_LANDING_HOSTS as POS_LANDING_HOSTS_ARRAY,
   LANDING_URL
-} from './constants.ts';
-import type { AuthCheckResponseMessage, SessionManagerOptions } from './types.ts';
+} from '@/lib/session_manager/constants.ts';
+import type { AuthCheckResponseMessage, SessionManagerOptions } from '@/lib/session_manager/types.ts';
 
 const DEFAULT_TARGET_URL = LANDING_URL;
 const POS_LANDING_HOSTS = new Set(

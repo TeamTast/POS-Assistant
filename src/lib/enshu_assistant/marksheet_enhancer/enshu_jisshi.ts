@@ -1,5 +1,5 @@
-import type { DestroyFn } from '../../types.ts';
-import type { MarksheetDeletionOptions } from '../types.ts';
+import type { DestroyFn } from '@/lib/types.ts';
+import type { MarksheetDeletionOptions } from '@/lib/enshu_assistant/types.ts';
 
 const MARKSHEET_INPUT_SELECTOR = 'input[type="radio"][name*="AnswerList"][name*="Nyuryokuchi"]' as const;
 
@@ -197,14 +197,9 @@ const removeFromHistory = (history: RadioInput[], predicate: SelectionPredicate)
     }
 };
 
-const popLastActiveEntry = (history: RadioInput[]): RadioInput | null => {
-    while (history.length > 0) {
-        const candidate = history.pop();
-        if (candidate && candidate.isConnected && candidate.checked) {
-            return candidate;
-        }
-    }
-    return null;
+const isDigitSelection = (input: RadioInput | null): boolean => {
+    const value = input?.value ?? '';
+    return /^[0-9]$/.test(value);
 };
 
 export const initMarksheetDeletion = ({ root = document }: MarksheetDeletionOptions = {}): DestroyFn => {
@@ -255,6 +250,92 @@ export const initMarksheetDeletion = ({ root = document }: MarksheetDeletionOpti
         }
     };
 
+    const pickBottomMostSelection = (): RadioInput | null => {
+        const resolveEntry = (
+            current: { entry: RadioInput | null; index: number },
+            candidate: RadioInput,
+            candidateIndex: number
+        ): { entry: RadioInput | null; index: number } => {
+            if (candidateIndex > current.index) {
+                return { entry: candidate, index: candidateIndex };
+            }
+
+            if (
+                candidateIndex === current.index &&
+                current.entry &&
+                (current.entry.compareDocumentPosition(candidate) & Node.DOCUMENT_POSITION_FOLLOWING)
+            ) {
+                return { entry: candidate, index: candidateIndex };
+            }
+
+            return current;
+        };
+
+        let bottomDigit = { entry: null as RadioInput | null, index: Number.NEGATIVE_INFINITY };
+        let bottomNonDigit = { entry: null as RadioInput | null, index: Number.NEGATIVE_INFINITY };
+
+        selectedByName.forEach((entry) => {
+            if (!(entry && entry.checked && entry.isConnected)) {
+                return;
+            }
+
+            const answerIndex = extractAnswerIndex(entry);
+            if (answerIndex == null) {
+                return;
+            }
+
+            if (isDigitSelection(entry)) {
+                bottomDigit = resolveEntry(bottomDigit, entry, answerIndex);
+                return;
+            }
+
+            bottomNonDigit = resolveEntry(bottomNonDigit, entry, answerIndex);
+        });
+
+        let bottomEntry: RadioInput | null = bottomNonDigit.entry ?? bottomDigit.entry ?? null;
+
+        if (!bottomEntry) {
+            let fallbackEntry: RadioInput | null = null;
+            let fallbackIndex = Number.NEGATIVE_INFINITY;
+
+            for (let index = selectionHistory.length - 1; index >= 0; index -= 1) {
+                const candidate = selectionHistory[index];
+
+                if (!(candidate && candidate.checked && candidate.isConnected)) {
+                    selectionHistory.splice(index, 1);
+                    continue;
+                }
+
+                const answerIndex = extractAnswerIndex(candidate);
+                if (answerIndex == null) {
+                    continue;
+                }
+
+                if (!isDigitSelection(candidate)) {
+                    bottomNonDigit = resolveEntry(bottomNonDigit, candidate, answerIndex);
+                }
+
+                if (
+                    answerIndex > fallbackIndex ||
+                    (answerIndex === fallbackIndex &&
+                        fallbackEntry &&
+                        (fallbackEntry.compareDocumentPosition(candidate) & Node.DOCUMENT_POSITION_FOLLOWING))
+                ) {
+                    fallbackEntry = candidate;
+                    fallbackIndex = answerIndex;
+                }
+            }
+
+            bottomEntry = bottomNonDigit.entry ?? fallbackEntry ?? null;
+        }
+
+        if (bottomEntry) {
+            removeFromHistory(selectionHistory, (entry) => entry === bottomEntry);
+        }
+
+        return bottomEntry;
+    };
+
     const handleChange = (event: Event): void => {
         const target = event.target;
         if (target instanceof HTMLInputElement) {
@@ -275,18 +356,23 @@ export const initMarksheetDeletion = ({ root = document }: MarksheetDeletionOpti
             return;
         }
 
-        const lastEntry = popLastActiveEntry(selectionHistory);
-        if (!lastEntry) {
+        const bottomEntry = pickBottomMostSelection();
+        if (!bottomEntry) {
             return;
         }
 
         event.preventDefault();
         event.stopPropagation();
 
-        lastEntry.checked = false;
-        dispatchMarksheetUpdate(lastEntry);
-        positionAtRadio(root, lastEntry);
-        pushPendingIndex(extractAnswerIndex(lastEntry));
+        const answerIndex = extractAnswerIndex(bottomEntry);
+        if (selectedByName.get(bottomEntry.name) === bottomEntry) {
+            selectedByName.delete(bottomEntry.name);
+        }
+        bottomEntry.checked = false;
+        dispatchMarksheetUpdate(bottomEntry);
+        positionAtRadio(root, bottomEntry);
+        pushPendingIndex(answerIndex);
+        scheduleSync();
     };
 
     let syncQueued = false;

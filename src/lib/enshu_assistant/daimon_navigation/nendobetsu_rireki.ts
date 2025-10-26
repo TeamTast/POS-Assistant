@@ -1,6 +1,6 @@
-import { createDaimonCountRecorder } from '../../../storage.ts';
-import type { DestroyFn } from '../../types.ts';
-import type { DaimonNavigationOptions } from '../types.ts';
+import { createDaimonCountRecorder } from '@/lib/storage.ts';
+import type { DestroyFn } from '@/lib/types.ts';
+import type { DaimonNavigationOptions } from '@/lib/enshu_assistant/types.ts';
 
 const DAIMON_SELECTOR = 'td.daimon-row-no span.rireki' as const;
 

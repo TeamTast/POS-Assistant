@@ -1,6 +1,6 @@
-import { getStoredDaimonCount, subscribeToDaimonCount } from '../../../storage.ts';
-import type { DestroyFn } from '../../types.ts';
-import type { DaimonNavigationOptions } from '../types.ts';
+import { getStoredDaimonCount, subscribeToDaimonCount } from '@/lib/storage.ts';
+import type { DestroyFn } from '@/lib/types.ts';
+import type { DaimonNavigationOptions } from '@/lib/enshu_assistant/types.ts';
 
 const NAV_CONTAINER_CLASS = 'pos-assistant-daimon-nav' as const;
 const NAV_STYLE_ID = 'pos-assistant-daimon-nav-style' as const;

@@ -1,4 +1,4 @@
-import { initDownloadFilenameManager } from '../shared.ts';
+import { initDownloadFilenameManager } from '@/lib/enshu_assistant/pdf_renamer/shared.ts';
 import type {
     DownloadFilenameManager,
     MondaiDownloadEnhancerOptions

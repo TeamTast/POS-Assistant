@@ -1,5 +1,5 @@
-import { AUTH_CHECK_MESSAGE } from './constants.ts';
-import type { AuthCheckRequestMessage, AuthCheckResponseMessage } from './types.ts';
+import { AUTH_CHECK_MESSAGE } from '@/lib/session_manager/constants.ts';
+import type { AuthCheckRequestMessage, AuthCheckResponseMessage } from '@/lib/session_manager/types.ts';
 
 interface EvaluateAuthenticationParams {
   readonly url: string;

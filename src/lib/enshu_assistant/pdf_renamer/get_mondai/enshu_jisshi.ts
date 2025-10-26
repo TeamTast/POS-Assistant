@@ -1,6 +1,6 @@
-import { createTitleCache } from '../shared.ts';
-import type { DestroyFn } from '../../../types.ts';
-import type { MondaiTitleObserverOptions } from '../../types.ts';
+import { createTitleCache } from '@/lib/enshu_assistant/pdf_renamer/shared.ts';
+import type { DestroyFn } from '@/lib/types.ts';
+import type { MondaiTitleObserverOptions } from '@/lib/enshu_assistant/types.ts';
 
 const DEFAULT_BUTTON_SELECTOR = '[data-url*="MondaiKaitoInsatsu"]' as const;
 const DEFAULT_TITLE_SELECTORS = ['.page-head-title', '.enshu-set-nm', 'h2.page-title'] as const;

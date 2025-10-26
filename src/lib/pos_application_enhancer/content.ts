@@ -1,4 +1,4 @@
-import { STUDENT_MENU_URL } from '../session_manager/constants.ts';
+import { STUDENT_MENU_URL } from '@/lib/session_manager/constants.ts';
 import type { PosApplicationEnhancerOptions } from './types.ts';
 
 const INIT_FLAG = '__posAssistantPosApplicationInitialized' as const;

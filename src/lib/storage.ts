@@ -1,5 +1,5 @@
-import type { DestroyFn } from './lib/types.ts';
-import type { DaimonCountRecord, DaimonCountRecorder } from './lib/enshu_assistant/types.ts';
+import type { DestroyFn } from '@/lib/types.ts';
+import type { DaimonCountRecord, DaimonCountRecorder } from '@/lib/enshu_assistant/types.ts';
 
 const STORAGE_ROOT_PREFIX = 'posAssistant:' as const;
 
