@@ -3,3 +3,9 @@ import { initSessionManagerBackground } from './functions/session_manager/backgr
 
 initEnshuAssistantBackground();
 initSessionManagerBackground();
+
+chrome.runtime.onInstalled.addListener((details) => {
+    if (details.reason === 'update') {
+        chrome.tabs.create({ url: 'https://tast.jp/news/qpbepj66ztt3' });
+    }
+});

@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "POS アシスタント",
     "description": "学力POSの動作を改善",
-    "version": "1.2.0",
+    "version": "1.3.0",
     "icons": {
         "16": "icons/16.png",
         "48": "icons/48.png",
